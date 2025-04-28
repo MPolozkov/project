@@ -1,7 +1,6 @@
-from masks import get_mask_card_number
-from masks import get_mask_account
-
 from typing import Union
+
+from masks import get_mask_account, get_mask_card_number
 
 # Словарь с префиксами карт и их названиями
 CARD_PREFIXES = {
@@ -46,7 +45,8 @@ def mask_account_card(name_card: Union[str, int]) -> str:
             # Если и это не получилось, значит, это не номер карты и не номер счета
             return name_card  # Или можно выбросить исключение
 
+
 if __name__ == '__main__':
 
     name_card = str(input())
-    print(get_mask_card_number(name_card))
+    print(mask_account_card(name_card))
