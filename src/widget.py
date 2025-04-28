@@ -46,4 +46,7 @@ def mask_account_card(name_card: Union[str, int]) -> str:
             # Если и это не получилось, значит, это не номер карты и не номер счета
             return name_card  # Или можно выбросить исключение
 
+if __name__ == '__main__':
 
+    name_card = str(input())
+    print(get_mask_card_number(name_card))
