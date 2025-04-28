@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Union
 
 from masks import get_mask_account, get_mask_card_number
@@ -20,6 +21,7 @@ CARD_PREFIXES = {
 
 
 def mask_account_card(name_card: Union[str, int]) -> str:
+    """Является ли входная строка номером карты или номером счета"""
     try:
         # Пробуем обработать как номер карты
         masked_number = get_mask_card_number(name_card)
@@ -50,3 +52,23 @@ if __name__ == '__main__':
 
     name_card = str(input())
     print(mask_account_card(name_card))
+
+
+def get_date(date_string: str) -> str:
+    """Преобразует строку с датой в формате "2024-03-11T02:26:18.671407" в формат "ДД.ММ.ГГГГ"."""
+    try:
+        # Преобразуем строку в объект datetime
+        date_object = datetime.fromisoformat(date_string)
+
+        # Форматируем объект datetime в нужный формат
+        formatted_date = date_object.strftime("%d.%m.%Y")
+
+        return formatted_date
+    except ValueError:
+        # Обрабатываем ошибки, если входная строка не соответствует ожидаемому формату
+        return "Неверный формат даты"
+
+
+if __name__ == '__main__':
+    date_string = str(input())
+    print(get_date(date_string))
