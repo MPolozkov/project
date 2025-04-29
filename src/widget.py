@@ -1,56 +1,43 @@
 from datetime import datetime
-from typing import Union
 
 from masks import get_mask_account, get_mask_card_number
 
-# Словарь с префиксами карт и их названиями
-CARD_PREFIXES = {
-    "7": "Visa",
-    "71": "Mastercard",
-    "37": "American Express",
-    "65": "Discover",
-    "35": "JCB",
-    "220": "МИР"
-}
 
-# Словарь для определения ТИПА
-CARD_TYPES = {
-    "98": "Classic",   # Visa Classic
-    "41": "Gold",      # Visa Gold
-    "92": "Platinum",  # Mastercard Standard
-}
-
-
-def mask_account_card(name_card: Union[str, int]) -> str:
+def mask_account_card(name_card: str) -> str:
     """Является ли входная строка номером карты или номером счета"""
-    name_card_str = str(name_card)  # Преобразуем в строку в самом начале
+    # Разделяем строку на слова
+    words = name_card.split()
+    card_number = ""
+    card_name = ""
 
-    try:
-        # Пробуем обработать как номер карты
-        masked_number = get_mask_card_number(name_card_str)
-        card_brand = "Неизвестно"
-        card_type = "Неизвестно"  # Уровень карты
+    # Ищем номер карты
+    for word in words:
+        if word.isdigit():
+            card_number = word
+            break  # Нашли номер, выходим из цикла
 
-        # Определяем бренд карты по префиксу
-        for prefix, brand in CARD_PREFIXES.items():
-            if name_card_str.startswith(prefix):
-                card_brand = brand
-                break
+    if card_number and len(card_number) == 16:
+        try:
+            masked_number = get_mask_card_number(card_number)
 
-        # Определяем тип карты (уровень) по BIN
-        bin_number = name_card_str[4:6]
-        if bin_number in CARD_TYPES:
-            card_type = CARD_TYPES[bin_number]
+            # Определяем имя карты (все слова до номера карты)
+            card_name = " ".join(words[:words.index(card_number)])
 
-        if card_brand != "Неизвестно" and card_brand == 13:
-            return f"{card_brand} {card_type}: {masked_number}"
-        else:
-            masked_number = get_mask_account(name_card_str)
-            return f"Номер счета: {masked_number}"
+            return f"{card_name}: {masked_number}" if card_name else masked_number
 
-    except ValueError:
-        # Если и это не получилось, значит, это не номер карты и не номер счета
-        return name_card_str  # Или можно выбросить исключение
+        except ValueError:
+            return name_card
+
+    elif len(str(card_number)) > 16:
+        try:
+            # Если в строке нет номера карты, пробуем обработать как номер счета
+            masked_number = get_mask_account(card_number)
+            return f"Счет: {masked_number}"
+        except ValueError:
+            # Если и это не получилось, возвращаем исходную строку
+            return f"{name_card}, Если и это не получилось, возвращаем исходную строку"
+    else:
+        return "Номером карты и неомером счета должен состоять только из цифр"
 
 
 if __name__ == '__main__':
