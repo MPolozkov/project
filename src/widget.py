@@ -4,50 +4,76 @@ from masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(name_card: str) -> str:
-    """Является ли входная строка номером карты или номером счета"""
-    # Разделяем строку на слова
-    words = name_card.split()
-    card_number = ""
-    card_name = ""
+    """Маскирует номер карты или номер счета в строке."""
+    name_card = name_card.strip()  # Удаляем пробелы в начале и конце
+    if not name_card:
+        return "Поле для ввода пустое"
 
-    # Ищем номер карты
-    for word in words:
-        if word.isdigit():
-            card_number = word
-            break  # Нашли номер, выходим из цикла
+    # 1. Ищем номер карты (13-19 цифр) в строке
+    number_start = -1
+    number_end = -1
+    for i, char in enumerate(name_card):
+        if char.isdigit():
+            if number_start == -1:
+                number_start = i
+            number_end = i
 
-    if card_number and len(card_number) == 16:
+    if number_start != -1:  # Если цифры найдены, пытаемся выделить карту
+        card_number = name_card[number_start : number_end + 1]
+
+        # Убедимся, что длина подходящая
+        if len(card_number) == 15:
+            card_name = name_card[:number_start].strip()  # Имя - всё до цифр
+
+            # 2. ПРОВЕРКА ФОРМАТА ИМЕНИ: Строго буквы, пробелы и дефисы
+            allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ -_"
+            if all(char in allowed_chars for char in card_name):
+
+                try:  # Попытка замаскировать номер
+                    masked_number = get_mask_card_number(card_number)
+                    return f"{card_name}: {masked_number}" if card_name else masked_number
+                except ValueError:  # Не удалось замаскировать, значит формат номера неверен
+                    return "Некорректный формат номера карты"
+
+            else:
+                return "Некорректный формат имени карты"
+    # Если не нашли цифры, то пробуем счет
+    digits_only = True
+    for char in name_card:
+        if not char.isdigit():
+            digits_only = False
+            break
+    if digits_only:
         try:
-            masked_number = get_mask_card_number(card_number)
-
-            # Определяем имя карты (все слова до номера карты)
-            card_name = " ".join(words[:words.index(card_number)])
-
-            return f"{card_name}: {masked_number}" if card_name else masked_number
-
+            masked_account = get_mask_account(name_card)
+            return f"Счет: {masked_account}"
         except ValueError:
-            return name_card
+            return "Некорректный формат номера счета"
 
-    elif len(str(card_number)) > 16:
-        try:
-            # Если в строке нет номера карты, пробуем обработать как номер счета
-            masked_number = get_mask_account(card_number)
-            return f"Счет: {masked_number}"
-        except ValueError:
-            # Если и это не получилось, возвращаем исходную строку
-            return f"{name_card}, Если и это не получилось, возвращаем исходную строку"
-    else:
-        return "Номером карты и неомером счета должен состоять только из цифр"
+    letters_only = True
+    for char in name_card:
+        if not char.isalpha() and char != " ":
+            letters_only = False
+            break
+    if letters_only:
+        return "Номер карты или номер счета не найден"  # Не нашли
+
+    return "Некорректный ввод"
 
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    name_card = str(input())
-    print(mask_account_card(name_card))
+# name_card = str(input())
+# print(mask_account_card(name_card))
 
 
 def get_date(date_string: str) -> str:
     """Преобразует строку с датой в формате "2024-03-11T02:26:18.671407" в формат "ДД.ММ.ГГГГ"."""
+
+    # проверка на пустоту
+    if not date_string:
+        return "Введите дату"
+
     try:
         # Преобразуем строку в объект datetime
         date_object = datetime.fromisoformat(date_string)
@@ -61,6 +87,6 @@ def get_date(date_string: str) -> str:
         return "Неверный формат даты"
 
 
-if __name__ == '__main__':
-    date_string = str(input())
-    print(get_date(date_string))
+# if __name__ == "__main__":
+    # date_string = str(input())
+    # print(get_date(date_string))
