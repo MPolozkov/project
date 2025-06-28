@@ -23,7 +23,7 @@ def get_mask_card_number(card_number: Union[str, int]) -> str:
     # Собираем маскированный номер
     masked_number = first_six + masked_part + last_four
     # Форматируем по блокам по 4 цифры
-    formatted_number = " ".join([masked_number[i : i + 4] for i in range(0, len(masked_number), 4)])
+    formatted_number = " ".join([masked_number[i: i + 4] for i in range(0, len(masked_number), 4)])
 
     return formatted_number
 
