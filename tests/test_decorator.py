@@ -1,9 +1,9 @@
 import pytest
-import time
 from pytonpoject import decorators
 
 
 def test_log_no_file(capsys):
+    """Этот тест проверяет работу декоратора @decorators.log(), когда не указан файл для записи логов"""
     @decorators.log()
     def add(x, y):
         return x + y
@@ -15,6 +15,7 @@ def test_log_no_file(capsys):
 
 
 def test_log_with_file(tmp_path):
+    """Тест для @decorators.log(), Здесь указан файл для записи логов (log_file). Она определяет функцию multiply(x, y), которая умножает два числа"""
     log_file = tmp_path / "test.log"
 
     @decorators.log(filename=log_file)
@@ -30,6 +31,7 @@ def test_log_with_file(tmp_path):
 
 
 def test_log_exception(capsys, tmp_path):
+    """Этот тест проверяет, как декоратор @decorators.log() обрабатывает исключения"""
     log_file = tmp_path / "error.log"
 
     @decorators.log(filename=log_file)
