@@ -2,6 +2,7 @@ from typing import Iterator, Iterable
 
 
 def filter_by_currency(transact: list, currency: str) -> Iterator:
+    """Генератор, принимает на вход список словарей, представляющих транзакции"""
     for x in transact:
         if x["operationAmount"]["currency"]["code"] == currency:
             yield x
@@ -47,6 +48,7 @@ for _ in range(2):
 
 
 def transaction_descriptions(transact: list) -> Iterator:
+    """Генератор принимает список словарей с транзакциями и возвращает описание каждой операции по очереди"""
     for i in transact:
         yield i["description"]
 
@@ -57,6 +59,7 @@ def transaction_descriptions(transact: list) -> Iterator:
 
 
 def card_number_generator(start: int, end: int) -> Iterator:
+    """Генератор выдает номера банковских карт"""
     for number in range(start, end + 1):
         card_number = str(number).zfill(16)
         formatted_number = " ".join([card_number[i:i + 4] for i in range(0, 16, 4)])
