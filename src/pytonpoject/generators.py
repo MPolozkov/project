@@ -1,4 +1,4 @@
-from typing import Iterator, Iterable
+from typing import Iterator
 
 
 def filter_by_currency(transact: list, currency: str) -> Iterator:
