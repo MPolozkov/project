@@ -1,6 +1,4 @@
-import pytest
-
-from pytonpoject import generators
+import generators
 from typing import Iterator, List, Dict
 
 

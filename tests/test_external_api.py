@@ -1,7 +1,7 @@
 import os
 import unittest
 from unittest.mock import patch
-from pytonpoject.external_api import conversions
+from external_api import conversions
 from dotenv import load_dotenv
 import requests
 

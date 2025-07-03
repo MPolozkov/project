@@ -1,7 +1,7 @@
 import json
 from typing import List, Dict
 
-from pytonpoject.external_api import conversions
+from external_api import conversions
 
 
 def json_get(file_patch: str) -> List[Dict]:

@@ -1,5 +1,5 @@
 import pytest
-from pytonpoject import decorators
+import decorators
 
 
 def test_log_no_file(capsys):
