@@ -26,8 +26,10 @@
 
 
 ## *Разработка*
+Файл `.env.sample` переименовать в `.env` и указать ключ доступа к API  
+
 ### Требования
-Для установки и запуска проекта, необходим poetry [petry](https://python-poetry.org/docs/#installing-with-the-official-installer)
+Для установки и запуска проекта, необходим poetry [poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
 
 ### Установка зависимостей
 Для установки зависимостей, выполните команду:
