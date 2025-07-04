@@ -52,9 +52,9 @@ def get_mask_card_number(card_number: Union[str, int]) -> str:
     return formatted_number
 
 
-if __name__ == '__main__':
-    card = str(input())
-    print(get_mask_card_number(card))
+# if __name__ == '__main__':
+    # card = str(input())
+    # print(get_mask_card_number(card))
 
 
 def get_mask_account(account_number: Union[int, str]) -> str:
@@ -83,6 +83,6 @@ def get_mask_account(account_number: Union[int, str]) -> str:
     return masked_number
 
 
-if __name__ == '__main__':
-    number = str(input())
-    print(get_mask_account(number))
+# if __name__ == '__main__':
+    # number = str(input())
+    # print(get_mask_account(number))
