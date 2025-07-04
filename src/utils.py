@@ -3,26 +3,51 @@ from typing import List, Dict
 
 from external_api import conversions
 
+import logging
+
+logger = logging.getLogger(__name__)
+file_handler = logging.FileHandler('../log/masks.log', "w", encoding="utf-8")
+file_formatter = logging.Formatter('%(asctime)s %(filename)s %(funcName)s %(levelname)s: %(message)s')
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+logger.setLevel(logging.ERROR)
+
+logger = logging.getLogger(__name__)
+file_handler = logging.FileHandler('../log/masks.log', "w", encoding="utf-8")
+file_formatter = logging.Formatter('%(asctime)s %(filename)s %(funcName)s %(levelname)s: %(message)s')
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+logger.setLevel(logging.WARNING)
+
+logger = logging.getLogger(__name__)
+file_handler = logging.FileHandler('../log/utils.log', "w", encoding="utf-8")
+file_formatter = logging.Formatter('%(asctime)s %(filename)s %(levelname)s: %(message)s')
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+logger.setLevel(logging.INFO)
+
 
 def json_get(file_patch: str) -> List[Dict]:
-    """Функция, которая принимает на вход путь до JSON-файла и возвращает список словарей с данными о финансовых транзакциях"""
+    """Функция, которая принимает на вход путь до JSON-файла и
+    возвращает список словарей с данными о финансовых транзакциях"""
     try:
-
+        logger.info('Открываем файл для чтения')
         with open(file_patch, 'r', encoding='utf-8') as file:
             transaction = json.load(file)
 
+        logger.info('Передаем список')
         if isinstance(transaction, list):
             return transaction
         else:
-            print("Ошибка: Данные в файле не являются списком.")
+            logger.error('Ошибка: Данные в файле не являются списком.')
             return []
 
     except FileNotFoundError:
-        print("Ошибка: Файл 'data/operations.json' не найден.")
+        logger.error('Ошибка: Файл "data/operations.json" не найден.')
     except json.JSONDecodeError:
-        print("Ошибка: Некорректный формат JSON  файле 'data/operations.json'.")
+        logger.error('Ошибка: Некорректный формат JSON  файле "data/operations.json"".')
     except Exception as e:
-        print(f"Произошла ошибка: {e}")
+        logger.error(f"Произошла ошибка: {e}")
 
 
 # if __name__ == "__main__":
@@ -34,17 +59,23 @@ def transaction_sum(transaction: list) -> float:
     """Функция возвращает сумму в рублях если транзакция приходит в другой валюте то функция конвертирует в рубли"""
     for x in transaction:
         if x:
+            logger.info('Получаем данные по операции')
             operation_amount = x["operationAmount"]["currency"]["code"]
             summ = x["operationAmount"]["amount"]
+            logger.info('Получаем значение с двумя цифрами после точки')
             summ_tu = float(summ)
             if operation_amount == "RUB":
+                logger.info('Выводим сумму если транзакция в рублях')
                 return summ_tu
             elif operation_amount == "USD":
+                logger.info('Если транзакция в долларах')
                 exchange_rate = conversions("USD", "RUB")
+                logger.info('Получаем рубли из долларов')
                 total_sum_rub = summ_tu * exchange_rate
                 return round(total_sum_rub, 2)
             elif operation_amount == "EUR":
                 exchange_rate = conversions("EUR", "RUB")
+                logger.info('Получаем рубли из евро')
                 total_sum_rub = summ_tu * exchange_rate
                 return round(total_sum_rub, 2)
 
@@ -64,9 +95,7 @@ transact = [
     }
 ]
 
-if __name__ == "__main__":
-    summa_transaction = transaction_sum(transact)
-    print(summa_transaction)
 
-
-
+# if __name__ == "__main__":
+# summa_transaction = transaction_sum(transact)
+# print(summa_transaction)
