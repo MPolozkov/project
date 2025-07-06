@@ -1,29 +1,23 @@
 import json
+import os
 from typing import List, Dict
 
 from external_api import conversions
 
 import logging
 
+log_dir = '../log'
+log_file = os.path.join(log_dir, 'utils.log')
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
 logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler('../log/masks.log', "w", encoding="utf-8")
+file_handler = logging.FileHandler(log_file, "w", encoding="utf-8")
 file_formatter = logging.Formatter('%(asctime)s %(filename)s %(funcName)s %(levelname)s: %(message)s')
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 logger.setLevel(logging.ERROR)
-
-logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler('../log/masks.log', "w", encoding="utf-8")
-file_formatter = logging.Formatter('%(asctime)s %(filename)s %(funcName)s %(levelname)s: %(message)s')
-file_handler.setFormatter(file_formatter)
-logger.addHandler(file_handler)
 logger.setLevel(logging.WARNING)
-
-logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler('../log/utils.log', "w", encoding="utf-8")
-file_formatter = logging.Formatter('%(asctime)s %(filename)s %(levelname)s: %(message)s')
-file_handler.setFormatter(file_formatter)
-logger.addHandler(file_handler)
 logger.setLevel(logging.INFO)
 
 
@@ -50,9 +44,9 @@ def json_get(file_patch: str) -> List[Dict]:
         logger.error(f"Произошла ошибка: {e}")
 
 
-# if __name__ == "__main__":
-    # get = json_get("../data/operations.json")
-    # print(get)
+if __name__ == "__main__":
+    get = json_get("../data/operations.json")
+    print(get)
 
 
 def transaction_sum(transaction: list) -> float:

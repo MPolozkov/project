@@ -1,19 +1,19 @@
+import os
 from typing import Union
 
 import logging
 
+log_dir = '../log'
+log_file = os.path.join(log_dir, 'masks.log')
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
 logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler('../log/masks.log', "w", encoding="utf-8")
+file_handler = logging.FileHandler(log_file, "w", encoding="utf-8")
 file_formatter = logging.Formatter('%(asctime)s %(filename)s %(funcName)s %(levelname)s: %(message)s')
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
 logger.setLevel(logging.ERROR)
-
-logger = logging.getLogger(__name__)
-file_handler = logging.FileHandler('../log/masks.log', "w", encoding="utf-8")
-file_formatter = logging.Formatter('%(asctime)s %(filename)s %(funcName)s %(levelname)s: %(message)s')
-file_handler.setFormatter(file_formatter)
-logger.addHandler(file_handler)
 logger.setLevel(logging.INFO)
 
 

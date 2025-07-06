@@ -33,7 +33,8 @@ def test_filter_mixed_currencies():
 
 
 def test_filter_multiple_currencies():
-    """Проверяет, что функция правильно фильтрует список транзакций, когда есть несколько разных валют и мы ищем конкретную."""
+    """Проверяет, что функция правильно фильтрует список транзакций, когда есть несколько разных валют и
+    мы ищем конкретную."""
     transactions = [
         {"operationAmount": {"currency": {"code": "USD"}}},
         {"operationAmount": {"currency": {"code": "EUR"}}},
@@ -50,14 +51,16 @@ def test_empty_list():
 
 
 def test_single_transaction():
-    """ Проверяет, что функция возвращает список, содержащий описание одной транзакции, если на вход передан список с одной транзакцией"""
+    """ Проверяет, что функция возвращает список, содержащий описание одной транзакции,
+    если на вход передан список с одной транзакцией"""
     transactions: List[Dict] = [{"description": "Grocery shopping"}]
     result: Iterator[str] = generators.transaction_descriptions(transactions)
     assert (list(result) == ["Grocery shopping"])
 
 
 def test_multiple_transactions():
-    """Проверяет, что функция возвращает список, содержащий описания всех транзакций, если на вход передан список с несколькими транзакциями."""
+    """Проверяет, что функция возвращает список, содержащий описания всех транзакций,
+    если на вход передан список с несколькими транзакциями."""
     transactions: List[Dict] = [
         {"description": "Rent payment"},
         {"description": "Online purchase"},
