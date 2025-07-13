@@ -19,52 +19,34 @@ def mask_account_card(name_card: str) -> str:
             number_end = i
 
     if number_start != -1:  # Если цифры найдены, пытаемся выделить карту
-        card_number = name_card[number_start : number_end + 1]
+        card_number = name_card[number_start: number_end + 1]
 
         # Убедимся, что длина подходящая
-        if len(card_number) == 15:
+        if len(card_number) >= 16:
             card_name = name_card[:number_start].strip()  # Имя - всё до цифр
 
             # 2. ПРОВЕРКА ФОРМАТА ИМЕНИ: Строго буквы, пробелы и дефисы
-            allowed_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ -_"
-            if all(char in allowed_chars for char in card_name):
-
-                try:  # Попытка замаскировать номер
+            # if all(char in allowed_chars for char in card_name):
+            try:  # Попытка замаскировать номер
+                if len(card_number) == 16:  # Предполагаем, что это карта
                     masked_number = get_mask_card_number(card_number)
                     return f"{card_name}: {masked_number}" if card_name else masked_number
-                except ValueError:  # Не удалось замаскировать, значит формат номера неверен
-                    return "Некорректный формат номера карты"
+                elif len(card_number) > 19:
+                    masked_sort = get_mask_account(card_number)
+                    return f"{card_name}: {masked_sort}" if card_name else masked_sort
+            except ValueError:
+                return "Некорректный формат номера"
 
-            else:
-                return "Некорректный формат имени карты"
-    # Если не нашли цифры, то пробуем счет
-    digits_only = True
-    for char in name_card:
-        if not char.isdigit():
-            digits_only = False
-            break
-    if digits_only:
-        try:
-            masked_account = get_mask_account(name_card)
-            return f"Счет: {masked_account}"
-        except ValueError:
-            return "Некорректный формат номера счета"
-
-    letters_only = True
-    for char in name_card:
-        if not char.isalpha() and char != " ":
-            letters_only = False
-            break
-    if letters_only:
-        return "Номер карты или номер счета не найден"  # Не нашли
+        # Если строка состоит только из букв, сообщаем, что ничего не найдено.
+        if all(char.isalpha() or char.isspace() for char in name_card):
+            return "Номер карты или номер счета не найден"
 
     return "Некорректный ввод"
 
 
-# if __name__ == '__main__':
-
-# name_card = str(input())
-# print(mask_account_card(name_card))
+if __name__ == '__main__':
+    name_card = str(input())
+    print(mask_account_card(name_card))
 
 
 def get_date(date_string: str) -> str:

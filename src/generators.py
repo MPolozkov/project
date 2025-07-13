@@ -2,7 +2,8 @@ from typing import Iterator
 
 
 def filter_by_currency(transact: list, currency: str) -> Iterator:
-    """Генератор, принимает на вход список словарей, представляющих транзакции"""
+    """Генератор, принимает на вход список словарей,
+    представляющих транзакции"""
     for x in transact:
         if x["operationAmount"]["currency"]["code"] == currency:
             yield x
@@ -48,7 +49,8 @@ for _ in range(2):
 
 
 def transaction_descriptions(transact: list) -> Iterator:
-    """Генератор принимает список словарей с транзакциями и возвращает описание каждой операции по очереди"""
+    """Генератор принимает список словарей с транзакциями и
+    возвращает описание каждой операции по очереди"""
     for i in transact:
         yield i["description"]
 

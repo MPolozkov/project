@@ -4,7 +4,7 @@ import inspect
 
 
 def log(filename=None):
-    """Генератор автоматически логирует начало и конец выполнения функции, Принимает необязательный аргумент filename"""
+    """Декоратор автоматически логирует начало и конец выполнения функции, Принимает необязательный аргумент filename"""
     def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):

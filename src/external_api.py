@@ -8,6 +8,7 @@ load_dotenv()
 
 
 def conversions(symbols: str, base: str, token=os.getenv('API_KEY')) -> float:
+    """Функция которая конвертирует валюты через сервис API"""
     url = f"https://api.apilayer.com/exchangerates_data/latest?symbols={symbols}&base={base}"
     headers = {"apikey": token}
     response = requests.request("GET", url, headers=headers)

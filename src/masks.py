@@ -1,5 +1,4 @@
 import os
-from typing import Union
 
 import logging
 
@@ -17,7 +16,7 @@ logger.setLevel(logging.ERROR)
 logger.setLevel(logging.INFO)
 
 
-def get_mask_card_number(card_number: Union[str, int]) -> str:
+def get_mask_card_number(card_number: str) -> str:
     """Функция для шифрования номера карты"""
     card_number_str = str(card_number)
 
@@ -27,7 +26,7 @@ def get_mask_card_number(card_number: Union[str, int]) -> str:
     elif card_number_str.isalpha():
         logger.error('Номер карты должен состоять только из цифр')
         return "Номер карты должен состоять только из цифр"
-    elif len(card_number_str) > 15:
+    elif len(card_number_str) < 16:
         logger.error('Номер карты не должен быть больше 15 цифр')
         return "Номер карты не должен быть больше 15 цифр"
 
@@ -57,7 +56,7 @@ def get_mask_card_number(card_number: Union[str, int]) -> str:
     # print(get_mask_card_number(card))
 
 
-def get_mask_account(account_number: Union[int, str]) -> str:
+def get_mask_account(account_number: str) -> str:
     """Функция для шифрования номера счета"""
     account_number_str = str(account_number)
 
