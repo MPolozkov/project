@@ -14,14 +14,21 @@ def process_bank_search(data: list[dict], search: str) -> list[dict]:
 
 def process_bank_operations(data: list[dict], categories: list) -> dict:
     """Функция которая, принимает список словарей с данными о
-    банковских операциях, списка категорий операций,
-    а возвращать словарь"""
+        банковских операциях, списка категорий операций,
+        а возвращать словарь"""
+    category_counts = {}
+
+    for category in categories:
+        category_counts[category] = 0
+
     for d in data:
-        descriptions = d["description"]
+        descriptions = d.get("description")
         if descriptions:
             for category in categories:
                 if re.search(category, descriptions, re.IGNORECASE):
-                    return category
+                    category_counts[category] += 1
+                    break
+    return category_counts
 
 transact = [
     {
@@ -43,6 +50,6 @@ transact = [
 
 
 if __name__ == "__main__":
-    categories = []
+    categories = ["Перевод организации"]
     summa_transaction = process_bank_operations(transact, categories)
     print(summa_transaction)
