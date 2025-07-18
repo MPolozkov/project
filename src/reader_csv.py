@@ -4,6 +4,7 @@ import csv
 
 
 def reade_csv(file_read: str) -> List[Dict[str, Any]]:
+    """Функция для чтения файлов CSV"""
     transactions: List = []
     with open(file_read, "r", encoding="UTF-8") as file:
         reader = csv.DictReader(file, delimiter=";")

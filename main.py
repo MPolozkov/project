@@ -43,7 +43,7 @@ def load_bank():
 
             if user_point:
                 print("Введите статус, по которому необходимо выполнить фильтрацию.")
-                status = ['EXECUTED', 'CANCELED', 'PENDING']
+                status = ["EXECUTED", "CANCELED", "PENDING"]
                 # for s in status:
                     #print(f"{s}", end=', ')
                 print(", ".join(status))
@@ -59,9 +59,9 @@ def load_bank():
                                 r = process_bank_search(transaction[0], transaction[1])
                                 filter_status.append(r)
                                 h = True
-                        if not h:
-                            print("Данного статуса нету в списке")
-                            exit()
+                    if not h:
+                        print("Данного статуса нету в списке")
+                        exit()
                         # print(filter_status)
                 else:
                     print(f"Статус операции {filters} недоступен")

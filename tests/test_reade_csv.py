@@ -9,7 +9,7 @@ class TestReadCsv(unittest.TestCase):
     @patch("builtins.open", new_callable=mock_open, read_data="header1,header2\nvalue1,value2")
     def test_read_csv_success(self, mock_file):
         """Тест проверяет успешное чтение CSV файла."""
-        file_path = "fake_file.csv"
+        file_path = "../data/transactions.csv"
         result = reade_csv(file_path)
         self.assertEqual(result, [{"header1": "value1", "header2": "value2"}])
         mock_file.assert_called_with(file_path, "r", encoding="UTF-8")

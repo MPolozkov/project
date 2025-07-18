@@ -26,9 +26,9 @@ def get_mask_card_number(card_number: str) -> str:
     elif card_number_str.isalpha():
         logger.error('Номер карты должен состоять только из цифр')
         return "Номер карты должен состоять только из цифр"
-    elif len(card_number_str) < 16:
-        logger.error('Номер карты не должен быть больше 15 цифр')
-        return "Номер карты не должен быть больше 15 цифр"
+    elif len(card_number_str) > 16:
+        logger.error('Номер карты не должен быть больше 16 цифр')
+        return "Номер карты не должен быть больше 16 цифр"
 
     logger.info('Получаем первые 6 цифр')
     first_six = card_number_str[:6]
@@ -51,9 +51,9 @@ def get_mask_card_number(card_number: str) -> str:
     return formatted_number
 
 
-# if __name__ == '__main__':
-    # card = str(input())
-    # print(get_mask_card_number(card))
+if __name__ == '__main__':
+    card = str(input())
+    print(get_mask_card_number(card))
 
 
 def get_mask_account(account_number: str) -> str:

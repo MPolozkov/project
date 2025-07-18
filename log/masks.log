@@ -1,1 +1,6 @@
-
+2025-07-18 14:32:50,391 masks.py get_mask_card_number INFO: Получаем первые 6 цифр
+2025-07-18 14:32:50,392 masks.py get_mask_card_number INFO: Получаем последние 4 цифры
+2025-07-18 14:32:50,392 masks.py get_mask_card_number INFO: Вычисляем количество символов для маскировки
+2025-07-18 14:32:50,392 masks.py get_mask_card_number INFO: Создаем строку маскировки
+2025-07-18 14:32:50,392 masks.py get_mask_card_number INFO: Собираем маскированный номер
+2025-07-18 14:32:50,392 masks.py get_mask_card_number INFO: Форматируем по блокам по 4 цифры
