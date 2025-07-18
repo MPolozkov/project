@@ -4,50 +4,58 @@ from masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(name_card: str) -> str:
-    """Является ли входная строка номером карты или номером счета"""
-    # Разделяем строку на слова
-    words = name_card.split()
-    card_number = ""
-    card_name = ""
+    """Маскирует номер карты или номер счета в строке."""
+    name_card = name_card.strip()  # Удаляем пробелы в начале и конце
+    if not name_card:
+        return "Поле для ввода пустое"
 
-    # Ищем номер карты
-    for word in words:
-        if word.isdigit():
-            card_number = word
-            break  # Нашли номер, выходим из цикла
+    # 1. Ищем номер карты (13-19 цифр) в строке
+    number_start = -1
+    number_end = -1
+    for i, char in enumerate(name_card):
+        if char.isdigit():
+            if number_start == -1:
+                number_start = i
+            number_end = i
 
-    if card_number and len(card_number) == 16:
-        try:
-            masked_number = get_mask_card_number(card_number)
+    if number_start != -1:  # Если цифры найдены, пытаемся выделить карту
+        card_number = name_card[number_start: number_end + 1]
 
-            # Определяем имя карты (все слова до номера карты)
-            card_name = " ".join(words[:words.index(card_number)])
+        # Убедимся, что длина подходящая
+        if len(card_number) >= 16:
+            card_name = name_card[:number_start].strip()  # Имя - всё до цифр
 
-            return f"{card_name}: {masked_number}" if card_name else masked_number
+            # 2. ПРОВЕРКА ФОРМАТА ИМЕНИ: Строго буквы, пробелы и дефисы
+            # if all(char in allowed_chars for char in card_name):
+            try:  # Попытка замаскировать номер
+                if len(card_number) == 16:  # Предполагаем, что это карта
+                    masked_number = get_mask_card_number(card_number)
+                    return f"{card_name}: {masked_number}" if card_name else masked_number
+                elif len(card_number) > 19:
+                    masked_sort = get_mask_account(card_number)
+                    return f"{card_name}: {masked_sort}" if card_name else masked_sort
+            except ValueError:
+                return "Некорректный формат номера"
 
-        except ValueError:
-            return name_card
+        # Если строка состоит только из букв, сообщаем, что ничего не найдено.
+        if all(char.isalpha() or char.isspace() for char in name_card):
+            return "Номер карты или номер счета не найден"
 
-    elif len(str(card_number)) > 16:
-        try:
-            # Если в строке нет номера карты, пробуем обработать как номер счета
-            masked_number = get_mask_account(card_number)
-            return f"Счет: {masked_number}"
-        except ValueError:
-            # Если и это не получилось, возвращаем исходную строку
-            return f"{name_card}, Если и это не получилось, возвращаем исходную строку"
-    else:
-        return "Номером карты и неомером счета должен состоять только из цифр"
+    return "Некорректный ввод"
 
 
 if __name__ == '__main__':
-
     name_card = str(input())
     print(mask_account_card(name_card))
 
 
 def get_date(date_string: str) -> str:
     """Преобразует строку с датой в формате "2024-03-11T02:26:18.671407" в формат "ДД.ММ.ГГГГ"."""
+
+    # проверка на пустоту
+    if not date_string:
+        return "Введите дату"
+
     try:
         # Преобразуем строку в объект datetime
         date_object = datetime.fromisoformat(date_string)
@@ -61,6 +69,6 @@ def get_date(date_string: str) -> str:
         return "Неверный формат даты"
 
 
-if __name__ == '__main__':
-    date_string = str(input())
-    print(get_date(date_string))
+# if __name__ == "__main__":
+    # date_string = str(input())
+    # print(get_date(date_string))
